@@ -3,7 +3,6 @@ import { onMounted } from 'vue'
 import { App, Box, Text, PointerEvent } from 'leafer-ui'
 import { Flow } from '@leafer-in/flow'
 import { Cell } from './CalHeatmap'
-import { TooltipPlugin } from 'leafer-x-tooltip-canvas'
 const props = defineProps({
   view: {
     type: String,
@@ -82,14 +81,6 @@ onMounted(() => {
   app.tree.add(flow)
   app.tree.add(box)
   app.start()
-  new TooltipPlugin(app, {
-    info: ['width', 'height', 'innerId', 'tag'],
-    showType: 'key-value',
-    showDelay: 0,
-    includesType: ['Cell', 'Rect', 'Flow'],
-    excludesType: [],
-    offset: [20, 20]
-  })
 })
 </script>
 
