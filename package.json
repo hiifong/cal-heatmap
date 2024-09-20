@@ -1,6 +1,6 @@
 {
   "name": "@hiifong/cal-heatmap",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "packageManager": "pnpm@9.9.0",
   "type": "module",
   "scripts": {
@@ -13,25 +13,13 @@
     "format": "prettier --write src/"
   },
   "files": [
-    "dist",
+    "dist/*",
     "README.md",
     "LICENSE"
   ],
-  "main": "dist/lib/index.js",
-  "module": "dist/es/index.js",
-  "types": "dist/es/index.d.ts",
-  "exports": {
-    ".": {
-      "import": {
-        "default": "./dist/es/index.js",
-        "types": "./dist/es/index.d.ts"
-      },
-      "require": {
-        "default": "./dist/lib/index.js",
-        "types": "./dist/lib/index.d.ts"
-      }
-    }
-  },
+  "main": "dist/cal-heatmap.umd.js",
+  "module": "dist/cal-heatmap.es.js",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=18.18.2"
   },
@@ -53,7 +41,6 @@
     "@leafer-ui/interface": "^1.0.2",
     "dayjs": "^1.11.13",
     "leafer-ui": "^1.0.2",
-    "leafer-x-tooltip-canvas": "^1.0.0",
     "vue": "^3.4.29"
   },
   "devDependencies": {
