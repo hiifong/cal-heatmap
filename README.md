@@ -1,5 +1,9 @@
 # cal-heatmap
 
+[WIP 🚧 ] the cal-heatmap is powerby LeaferJS
+
+---
+
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup
