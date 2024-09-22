@@ -2,7 +2,10 @@
 import { onMounted } from 'vue'
 import { App, Box, Text, PointerEvent } from 'leafer-ui'
 import { Flow } from '@leafer-in/flow'
-import { Cell } from './CalHeatmap'
+import { Cell } from './Cell'
+import { ScrollBar } from '@leafer-in/scroll'
+import dayjs from 'dayjs'
+
 const props = defineProps({
   view: {
     type: String,
@@ -18,11 +21,17 @@ onMounted(() => {
     zoom: {
       disabled: true
     },
-    tree: {}
+    tree: {},
+    sky: {}
   })
 
+  new ScrollBar(app)
+
+  console.log('----> day:', Math.ceil(dayjs().diff(dayjs().subtract(1, 'year').startOf('week').toDate(), 'day', true)))
+  console.log('----> day: ', dayjs().subtract(1, 'year').startOf('week').toDate())
+
   const rects: Array<Cell> = []
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < Math.ceil(dayjs().diff(dayjs().subtract(1, 'year').startOf('week'), 'day', true)); i++) {
     rects.push(
       new Cell({
         date: 2024,
@@ -30,36 +39,34 @@ onMounted(() => {
         width: 20,
         height: 20,
         fill: '#32cd79',
-        stroke: 'black',
-        strokeWidth: 0.5,
         cornerRadius: 5,
-        hoverStyle: { fill: 'rgba(255,205,121, 0.8)' },
-        pressStyle: { fill: 'rgba(50,205,121, 1)' },
         draggable: true,
         event: {
           [PointerEvent.ENTER]: function (e: PointerEvent) {
             let cell = e.current as Cell
-            // cell.fill = '#32cd79'
-            console.log('=========> cell: ', cell)
-            console.log('=========> in{ date: ', cell.date, ', value: ', cell.value, ' }')
+            cell.fill = '#22ffaa'
+            // console.log('=========> in{ date: ', cell.date, ', value: ', cell.value, ' }')
           },
           [PointerEvent.LEAVE]: function (e: PointerEvent) {
             let cell = e.current as Cell
-            // cell.fill = '#32cd79'
-            console.log('=========> out{ date: ', cell.date, ', value: ', cell.value, ' }')
+            cell.fill = '#32cd79'
+          },
+          [PointerEvent.CLICK]: function (e: PointerEvent) {
+            let cell = e.current as Cell
+            console.log('=========> cell: ', cell)
           }
         }
       })
     )
   }
   const flow = new Flow({
-    flow: true,
+    flow: 'y',
     flowWrap: true,
     gap: 5,
     padding: 20,
     children: rects,
-    width: 500,
-    height: 500
+    width: 760,
+    height: 220
   })
 
   const box = new Box({
