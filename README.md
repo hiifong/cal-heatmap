@@ -1,6 +1,6 @@
 # cal-heatmap
 
-[WIP 🚧 ] the cal-heatmap is powerby LeaferJS
+[WIP 🚧 ] the cal-heatmap is powerby [LeaferJS](https://github.com/leaferjs/ui)
 
 ---
 
