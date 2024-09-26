@@ -1,2 +1,5 @@
+export * from './Interface'
+export * from './Config'
+export * from './Cell'
+export * from './Heatmap'
 export * from './CalHeatmap'
-export { default as CalHeatmap } from './CalHeatmap.vue'

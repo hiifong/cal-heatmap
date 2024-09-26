@@ -1,6 +1,6 @@
 {
   "name": "@hiifong/cal-heatmap",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "packageManager": "pnpm@9.9.0",
   "type": "module",
   "scripts": {
@@ -37,12 +37,12 @@
   },
   "homepage": "https://github.com/hiifong/cal-heatmap#readme",
   "dependencies": {
-    "@leafer-in/animate": "^1.0.3",
-    "@leafer-in/flow": "^1.0.3",
-    "@leafer-in/scroll": "^1.0.3",
-    "@leafer-ui/interface": "^1.0.3",
+    "@leafer-in/animate": "^1.0.4",
+    "@leafer-in/flow": "^1.0.4",
+    "@leafer-in/scroll": "^1.0.4",
+    "@leafer-ui/interface": "^1.0.4",
     "dayjs": "^1.11.13",
-    "leafer-ui": "^1.0.3",
+    "leafer-ui": "^1.0.4",
     "vue": "^3.4.29"
   },
   "devDependencies": {

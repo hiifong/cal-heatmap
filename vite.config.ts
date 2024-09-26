@@ -36,8 +36,8 @@ export default defineConfig({
     }),
     dts({
       insertTypesEntry: true,
-      include: ['src/**/*.ts', 'src/**/*.vue'],
-      exclude: ['src/App.vue', 'src/main.ts'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/*.vue', 'src/main.ts', 'src/style.css'],
       tsconfigPath: './tsconfig.app.json'
     })
   ],

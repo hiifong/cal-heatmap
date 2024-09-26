@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import CalHeatmap from './CalHeatmap.vue'
+import { onMounted } from 'vue'
+import { CalHeatmap } from './CalHeatmap'
+import type { IConfig } from './Interface'
+
+const config: IConfig = {
+  view: 'cal-heatmap'
+}
+onMounted(() => new CalHeatmap(config))
 </script>
 
 <template>
   <div class="main">
     <div id="cal-heatmap">
-      <CalHeatmap view="cal-heatmap" />
+      <h1>Calendar Heatmap</h1>
     </div>
   </div>
 </template>
@@ -18,9 +25,16 @@ import CalHeatmap from './CalHeatmap.vue'
   justify-content: center;
   align-items: center;
 }
+
 #cal-heatmap {
   width: 90%;
-  height: 90%;
-  background-color: gainsboro;
+  height: 40%;
+  border: 2px solid black;
+  border-radius: 15px;
+}
+
+h1 {
+  margin-top: -50px;
+  text-align: center;
 }
 </style>

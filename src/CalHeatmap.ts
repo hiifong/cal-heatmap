@@ -1,61 +1,90 @@
-import { Rect, RectData, registerUI, dataProcessor, dataType } from 'leafer-ui'
-import type { IRectInputData, IRectData } from '@leafer-ui/interface'
+import { App, PointerEvent } from 'leafer-ui'
+import { Flow } from '@leafer-in/flow'
+import { Cell } from './Cell'
+import { ScrollBar } from '@leafer-in/scroll'
+import dayjs from 'dayjs'
+import type { IConfig, IData, ILocale } from './Interface'
+import { defaultConfig, defaultLevelColor, defaultLocale } from './Config'
 
-// 定义数据接口
-export interface IHeatmapInputData extends IRectInputData {
-  // 输入数据接口，需定义为可选项，比如: width?: number | string
-  date?: number
-  value?: number
-}
+export class CalHeatmap {
+  private readonly config: IConfig
+  public data?: IData
+  private readonly levelColor: Array<string> = defaultLevelColor
+  private readonly locale: ILocale = defaultLocale
 
-export interface IHeatmapData extends IRectData {
-  // 数据处理（计算数据）接口, 需定义为可选项，比如: width?: number
-}
-
-// 定义数据处理类
-export class HeatmapData extends RectData implements IHeatmapData {
-  // 元素数据类，负责元素的数据处理， 没有特殊处理逻辑的情况，定义一个空类就行
-  _date?: number
-  _value?: number
-
-  //会自动转为 width 的 setter函数 并移除掉，所以不要调用super.setWidth(value)
-  setDate(value: number): void {
-    if (value < 0) {
-      value = 0
+  constructor(config: IConfig = defaultConfig, data?: IData, locale?: ILocale) {
+    this.config = config
+    if (data) {
+      this.data = data
     }
-    this._date = value
-    // 通过 this.__leaf 可访问元素自身
-  }
-
-  setValue(value: number): void {
-    if (value < 0) {
-      value = 0
+    if (locale) {
+      this.locale = locale
     }
-    this._value = value
-  }
-}
-
-// 注册自定义元素
-@registerUI()
-export class Heatmap extends Rect {
-  // 定义全局唯一的tag名称
-  public get __tag() {
-    return 'Heatmap'
+    console.log('======> config: ', this.config.view)
+    this.init()
   }
 
-  // 注册数据处理类，防止污染被继承元素的数据
-  @dataProcessor(HeatmapData)
-  public declare __: IHeatmapData
+  private init() {
+    const app = new App({
+      view: this.config.view,
+      start: false,
+      type: 'document',
+      zoom: {
+        disabled: true
+      },
+      tree: {},
+      sky: {}
+    })
 
-  // 4定义初始化输入数据
-  constructor(data: IHeatmapInputData) {
-    super(data)
-    // ...
+    new ScrollBar(app)
+
+    console.log(
+      '----> day:',
+      Math.ceil(dayjs().diff(dayjs().subtract(1, 'year').startOf('week').toDate(), 'day', true))
+    )
+    console.log('----> day: ', dayjs().subtract(1, 'year').startOf('week').toDate())
+
+    const rects: Array<Cell> = []
+    for (let i = 0; i < Math.ceil(dayjs().diff(dayjs().subtract(1, 'year').startOf('week'), 'day', true)); i++) {
+      const color = this.levelColor[i % 5]
+      rects.push(
+        new Cell({
+          date: 2024,
+          value: i,
+          width: 20,
+          height: 20,
+          fill: color,
+          cornerRadius: 5,
+          draggable: true,
+          event: {
+            [PointerEvent.ENTER]: function (e: PointerEvent) {
+              const cell = e.current as Cell
+              cell.fill = '#22ffaa'
+              // console.log('=========> in{ date: ', cell.date, ', value: ', cell.value, ' }')
+            },
+            [PointerEvent.LEAVE]: function (e: PointerEvent) {
+              const cell = e.current as Cell
+              cell.fill = color
+            },
+            [PointerEvent.CLICK]: function (e: PointerEvent) {
+              const cell = e.current as Cell
+              console.log('=========> cell: ', cell)
+            }
+          }
+        })
+      )
+    }
+    const flow = new Flow({
+      flow: 'y',
+      flowWrap: true,
+      gap: 5,
+      padding: 20,
+      children: rects,
+      width: 760,
+      height: 220
+    })
+
+    app.tree.add(flow)
+    app.start()
   }
-
-  @dataType(0)
-  public declare date: number
-
-  @dataType(0)
-  public declare value: number
 }
