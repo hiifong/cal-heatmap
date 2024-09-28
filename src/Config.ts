@@ -1,9 +1,5 @@
+import dayjs from 'dayjs'
 import type { IConfig, ILocale } from './Interface'
-
-export const defaultConfig: IConfig = {
-  view: 'cal-heatmap',
-  formatter: undefined
-}
 
 export const defaultLevelColor: Array<string> = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
 
@@ -30,4 +26,11 @@ export const defaultLocale: ILocale = {
   weekDay: deafultWeekDay,
   less: 'Less',
   more: 'More'
+}
+
+export const defaultConfig: IConfig = {
+  view: 'cal-heatmap',
+  startDate: dayjs().subtract(1, 'year').startOf('week').toDate(),
+  endDate: dayjs().toDate(),
+  locale: defaultLocale
 }

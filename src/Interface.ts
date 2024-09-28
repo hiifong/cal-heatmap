@@ -1,5 +1,8 @@
 export interface IConfig {
-  view: string
+  view?: string
+  startDate?: Date
+  endDate?: Date
+  locale?: ILocale
   formatter?: (() => string) | undefined
 }
 

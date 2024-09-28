@@ -4,8 +4,8 @@ import type { IRectInputData, IRectData } from '@leafer-ui/interface'
 // 定义数据接口
 export interface ICellInputData extends IRectInputData {
   // 输入数据接口，需定义为可选项，比如: width?: number | string
-  date?: number | string
-  value?: number | string
+  date?: Date
+  value?: number | string | undefined
 }
 
 export interface ICellData extends IRectData {
@@ -15,14 +15,11 @@ export interface ICellData extends IRectData {
 // 定义数据处理类
 export class CellData extends RectData implements ICellData {
   // 元素数据类，负责元素的数据处理， 没有特殊处理逻辑的情况，定义一个空类就行
-  _date?: number | string
+  _date?: Date
   _value?: number | string
 
   //会自动转为 width 的 setter函数 并移除掉，所以不要调用super.setWidth(value)
-  setDate(value: number): void {
-    if (value < 0) {
-      value = 0
-    }
+  setDate(value: Date): void {
     this._date = value
     // 通过 this.__leaf 可访问元素自身
   }
