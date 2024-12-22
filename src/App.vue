@@ -11,24 +11,21 @@ onMounted(() => new CalHeatmap(config))
 
 <template>
   <div class="main">
-    <div id="cal-heatmap">
-      <h1>Calendar Heatmap</h1>
-    </div>
+    <div id="cal-heatmap"></div>
   </div>
 </template>
 
 <style scoped>
 .main {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 #cal-heatmap {
-  width: 90%;
-  height: 40%;
+  width: 800px;
+  height: 260px;
   border: 2px solid black;
   border-radius: 15px;
 }

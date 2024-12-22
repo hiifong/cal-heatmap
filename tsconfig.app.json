@@ -11,10 +11,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "experimentalDecorators": true
   }
 }

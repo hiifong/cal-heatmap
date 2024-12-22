@@ -1,4 +1,4 @@
-import { App, Box, Text, PointerEvent } from 'leafer-ui'
+import { App, Box, Text, PointerEvent, type IFill } from 'leafer-ui'
 import { Flow } from '@leafer-in/flow'
 import { Cell } from './Cell'
 import { ScrollBar } from '@leafer-in/scroll'
@@ -9,34 +9,41 @@ import { defaultConfig, defaultLevelColor, defaultLocale } from './Config'
 
 dayjs.extend(advancedFormat)
 
+let fill: IFill | undefined
+
+const text = new Text({
+  fill: '#ffffff',
+  padding: [5, 5],
+  textAlign: 'center',
+  verticalAlign: 'middle'
+})
+
+const box = new Box({
+  fill: '#25292e',
+  cornerRadius: 8,
+  children: [text]
+})
+
 const onEnter = (e: PointerEvent) => {
   const cell = e.current as Cell
+  fill = cell.fill
   cell.fill = '#22ffaa'
   console.log('=========> pos: { x: ', e.x, ', y: ', e.y)
-  const box = new Box({
-    x: e.x,
-    y: e.y,
-    fill: '#25292e',
-    cornerRadius: 8,
-    children: [
-      {
-        tag: 'Text',
-        text: `${cell.value > 0 ? cell.value : 'No'} contributions on ${dayjs(cell.date).format('MMMM Do')}`,
-        fill: '#ffffff',
-        padding: [5, 5],
-        textAlign: 'center',
-        verticalAlign: 'middle'
-      }
-    ]
-  })
-  console.log('=====> id: ', box.innerId)
-  console.log('=====> date: ', cell.date)
+  text.text = `${cell.value > 0 ? cell.value : 'No'} contributions on ${dayjs(cell.date).format('MMMM Do')}`
+  console.log('tooltip box bounds: ', text.boxBounds)
 
+  box.x = cell.x
+  box.y = cell.y
+  box.opacity = 1
   const parent = cell.parent?.parent
   parent?.add(box)
-  setTimeout(() => {
-    box.destroy()
-  }, 500)
+}
+
+const onLeave = (e: PointerEvent) => {
+  const cell = e.current as Cell
+  console.log('cell position: ', cell.boxBounds)
+  cell.fill = fill
+  box.opacity = 0
 }
 
 export class CalHeatmap {
@@ -49,7 +56,6 @@ export class CalHeatmap {
   private today: Date = dayjs().toDate()
 
   private app!: App
-  private toolTipId?: number
 
   constructor(config?: IConfig, data?: IData) {
     this.config = Object.assign({}, defaultConfig, config)
@@ -80,10 +86,7 @@ export class CalHeatmap {
           draggable: true,
           event: {
             [PointerEvent.ENTER]: onEnter,
-            [PointerEvent.LEAVE]: function (e: PointerEvent) {
-              const cell = e.current as Cell
-              cell.fill = color
-            },
+            [PointerEvent.LEAVE]: onLeave,
             [PointerEvent.CLICK]: function (e: PointerEvent) {
               const cell = e.current as Cell
               console.log('=========> cell: ', cell)
@@ -107,7 +110,7 @@ export class CalHeatmap {
     this.app.tree.add(flow)
     this.app.start()
 
-    console.log('=====> flow bounds: ', this.app.tree.getBounds('box', this.app.tree))
+    console.log('cal heatmap box bounds: ', this.app.clientBounds)
   }
 
   private initApp() {
@@ -171,17 +174,21 @@ export class CalHeatmap {
         })
       )
     }
+
     legendItems.push(more)
 
     const legendFlow = new Flow({
-      x: 300,
-      y: 220,
       height: 20,
       gap: 5,
       children: legendItems
     })
+    console.log('app box bounds: ', this.app.clientBounds)
+
+    legendFlow.x = this.app.clientBounds.width - legendFlow.boxBounds.width - 20
+    legendFlow.y = this.app.clientBounds.height - legendFlow.boxBounds.height - 20
+    console.log('legend: ', legendFlow.boxBounds)
+
     this.app.ground.add(legendFlow)
     new ScrollBar(this.app)
-    console.log('=====> ground bounds: ', this.app.ground.getBounds('box', this.app))
   }
 }
