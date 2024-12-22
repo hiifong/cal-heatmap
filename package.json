@@ -42,8 +42,7 @@
     "@leafer-in/scroll": "^1.1.0",
     "@leafer-ui/interface": "^1.1.0",
     "dayjs": "^1.11.13",
-    "leafer-ui": "^1.1.0",
-    "vue": "^3.5.13"
+    "leafer-ui": "^1.1.0"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
@@ -62,6 +61,7 @@
     "vite": "^6.0.5",
     "vite-plugin-dts": "^4.4.0",
     "vite-plugin-vue-devtools": "^7.6.8",
+    "vue": "^3.5.13",
     "vue-tsc": "^2.1.10"
   }
 }
